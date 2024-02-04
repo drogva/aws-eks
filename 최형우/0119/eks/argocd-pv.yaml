@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: argo-pv
+spec:
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: ""
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: failure-domain.beta.kubernetes.io/zone
+              operator: In
+              values:
+                - ap-northeast-2b
+  awsElasticBlockStore:
+    volumeID: vol-097d5e387f8b3ede1
+    fsType: ext4

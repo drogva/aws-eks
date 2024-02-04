@@ -1,0 +1,29 @@
+pipeline {
+    options {
+        timeout(time: 1, unit: 'HOURS')
+    }
+    
+    agent any
+
+    environment {
+        ARGOCD_SERVER = 'argo.seunghobet.link'
+        APP_NAME = 'kpop'
+    }
+
+    stages {
+        stage('Sync ArgoCD Application') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'argocd-auth-token', variable: 'ARGOCD_AUTH_TOKEN')]) {
+                        echo "Syncing ArgoCD application..."
+                        sh '''
+                            curl -s -k -H 'Content-Type: application/json' -H "Authorization: Bearer ${ARGOCD_AUTH_TOKEN}" -X POST \
+                                --data '{}' \
+                                https://${ARGOCD_SERVER}/api/v1/applications/${APP_NAME}/sync
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
