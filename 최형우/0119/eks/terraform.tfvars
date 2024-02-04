@@ -1,1 +1,0 @@
-ssh_key = "C:/Users/soldesk/Desktop/ssh key"
